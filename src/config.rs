@@ -12,8 +12,6 @@ const DEFAULT_QBITTORRENT_HOST: &str = "http://localhost";
 const DEFAULT_QBITTORRENT_PORT: u16 = 8080;
 const DEFAULT_PROTON_LOGFILE: &str = ".cache/Proton/VPN/logs/vpn-cli.log";
 
-// ---
-
 #[derive(Deserialize, Debug)]
 pub struct QBitTorrentConfig {
     #[serde(default = "default_qbittorrent_host")]

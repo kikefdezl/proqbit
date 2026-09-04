@@ -12,6 +12,9 @@ pub enum ProqbitError {
     #[error("Notify error: {0}")]
     Notify(#[from] notify::Error),
 
+    #[error("NotifyRust error: {0}")]
+    NotifyRust(#[from] notify_rust::error::Error),
+
     #[error("Figment error: {0}")]
     Figment(#[from] Box<figment::Error>),
 }

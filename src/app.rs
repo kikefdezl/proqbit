@@ -2,6 +2,7 @@ use std::path::{Path, PathBuf};
 
 use notify::event::{AccessKind, AccessMode};
 use notify::{Event, EventKind};
+use notify_rust::{Notification, Timeout};
 
 use crate::client::QBitTorrentClient;
 use crate::error::Result;
@@ -76,6 +77,14 @@ impl Handler<'_> {
             self.client.update_port(port)?;
             *self.port = Some(port);
         }
+
+        let msg = format!("Updated QBitTorrent port: {}", port);
+        println!("{}", msg);
+        Notification::new()
+            .summary("ProqBit")
+            .body(&msg)
+            .timeout(Timeout::Milliseconds(10000))
+            .show()?;
         Ok(())
     }
 }

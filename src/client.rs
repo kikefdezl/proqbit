@@ -136,8 +136,6 @@ impl QBitTorrentClient {
             .post(url)
             .send_form([("json", json_str.as_str())])?;
 
-        println!("Updated QBitTorrent listening port to {}", port);
-
         Ok(())
     }
 }
