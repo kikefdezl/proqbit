@@ -22,7 +22,7 @@ pub fn extract_last_port(path: &Path) -> Option<u16> {
             continue;
         }
 
-        let Some(prev_line) = lines.get(i - 1) else {
+        let Some(prev_line) = lines.get(lines.len() - i - 2) else {
             continue;
         };
 
