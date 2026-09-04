@@ -1,0 +1,15 @@
+[Unit]
+Description=ProqBit - Proton VPN & qBittorrent port-forwarding synchronization daemon
+After=network.target
+
+[Service]
+Type=simple
+ExecStart=%h/.cargo/bin/proqbit
+Restart=always
+RestartSec=5
+Environment=RUST_BACKTRACE=1
+StandardOutput=journal
+StandardError=journal
+
+[Install]
+WantedBy=default.target
