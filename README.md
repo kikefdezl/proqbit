@@ -1,5 +1,7 @@
 # proqbit
 
+[![CI](https://github.com/kikefdezl/proqbit/actions/workflows/ci.yml/badge.svg)](https://github.com/kikefdezl/proqbit/actions/workflows/ci.yml)
+
 Synchronize Proton VPN's forwarded port with qBittorrent's listening port
 
 ## Prerequisites
