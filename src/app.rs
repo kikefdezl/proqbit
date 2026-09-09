@@ -19,9 +19,11 @@ pub struct AppConfig {
 
 pub struct App {
     log_file_path: PathBuf,
-    port: Option<Port>,
     watcher: PathWatcher,
     client: QBitTorrentClient,
+
+    port: Option<Port>,
+    log_offset: usize,
 }
 
 impl App {
@@ -31,6 +33,7 @@ impl App {
             port: None,
             watcher: cfg.watcher,
             client: cfg.client,
+            log_offset: 0,
         }
     }
 
@@ -41,8 +44,9 @@ impl App {
 
         let mut handler = Handler {
             log_file_path: &self.log_file_path,
-            port: &mut self.port,
             client: &self.client,
+            port: &mut self.port,
+            offset: &mut self.log_offset,
         };
 
         for evt in events {
@@ -57,8 +61,9 @@ impl App {
 
 struct Handler<'a> {
     log_file_path: &'a Path,
-    port: &'a mut Option<u16>,
     client: &'a QBitTorrentClient,
+    port: &'a mut Option<u16>,
+    offset: &'a mut usize,
 }
 
 impl Handler<'_> {
@@ -68,17 +73,18 @@ impl Handler<'_> {
         };
         println!("Received event: {:?}", evt);
 
-        let Some(port) = extract_last_port(self.log_file_path) else {
+        let Some(match_) = extract_last_port(self.log_file_path, *self.offset) else {
             println!("No last port forwarded found in logfile");
             return Ok(());
         };
 
-        if *self.port != Some(port) {
-            self.client.update_port(port)?;
-            *self.port = Some(port);
+        if *self.port != Some(match_.port) {
+            self.client.update_port(match_.port)?;
+            *self.port = Some(match_.port);
+            *self.offset = match_.offset;
         }
 
-        let msg = format!("Updated QBitTorrent port: {}", port);
+        let msg = format!("Updated QBitTorrent port: {}", match_.port);
         println!("{}", msg);
         Notification::new()
             .summary("ProqBit")
