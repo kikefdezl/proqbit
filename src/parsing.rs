@@ -17,8 +17,7 @@ pub struct Match {
 // 2026-09-04T10:48:54.268839+00:00 | proton.vpn.platform/port_forwarding.rs:240 | INFO | Receiving Response { version: 0, operation: 130, response_code: 0, gateway_epoch_seconds: 160514, internal_port: 55755, external_port: 55755, lifetime_seconds: 60 }
 // 2026-09-04T10:48:54.268929+00:00 | proton.vpn.platform/listener.rs:118 | INFO | Forwarded port updated.
 pub fn extract_last_port(path: &Path, offset: usize) -> Option<Match> {
-    // TODO: This can be heavily optimized by lazy-reading lines of the file end to start, and by keeping track of
-    // the index of last last line checked to avoid checking already parsed lines in future calls.
+    // TODO: This can be heavily optimized by using iterators to not load the entire file contents into memory.
     let lines: Vec<String> = read_to_string(path)
         .ok()?
         .lines()
